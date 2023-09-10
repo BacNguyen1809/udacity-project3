@@ -17,7 +17,7 @@
       wait_for_connection: 
 
     - name: "install python for Ansible."
-      opt:
+      apt:
         name: python3
         state: latest
         update_cache: yes
