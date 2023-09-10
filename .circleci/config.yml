@@ -188,7 +188,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node
+      - image: circleci/node:18
     steps:
       - checkout
       - run:
