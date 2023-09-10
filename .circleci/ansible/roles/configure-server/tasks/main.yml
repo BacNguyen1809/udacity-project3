@@ -1,0 +1,27 @@
+ ---
+- name: Update/upgrade packages
+  become: yes
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: yes
+
+- name: remove unneeded deps
+  become: yes
+  apt:
+    autoremove: yes
+
+- name: Install deps
+  become: yes
+  apt:
+    name: ['nodejs','npm']
+    state: latest
+    update_cache: yes
+
+- name: Install PM2
+  become: yes
+  npm:
+    name: pm2
+    globlal: yes
+    state: latest
+    production: yes
