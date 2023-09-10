@@ -188,7 +188,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:19.0.1
+      - image: cimg/node:18
     steps:
       - checkout
       - run:
