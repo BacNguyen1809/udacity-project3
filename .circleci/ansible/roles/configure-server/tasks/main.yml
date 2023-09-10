@@ -1,4 +1,4 @@
- ---
+---
 - name: "Update and upgrade packages"
   become: yes
   apt:
@@ -14,7 +14,9 @@
 - name: Install deps
   become: yes
   apt:
-    name: ['nodejs','npm']
+    name:
+      - nodejs
+      - npm
     state: latest
     update_cache: yes
 
@@ -22,6 +24,6 @@
   become: yes
   npm:
     name: pm2
-    globlal: yes
+    global: yes
     state: latest
     production: yes
