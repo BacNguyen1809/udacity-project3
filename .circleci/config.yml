@@ -204,7 +204,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
             npm run migrations > migrations_dump.txt
 
       - run:
@@ -259,7 +258,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-          - 'a2:37:2d:e1:84:cf:a0:90:59:4d:dd:3e:c5:97:ed:7e:b3:15:f5:f0' 
+          - '0a:b5:62:81:42:b2:5c:e7:48:3c:83:a4:20:6d:a2:ea:5d:25:06:d5' 
       - run:
           name: Install dependencies
           command: |
