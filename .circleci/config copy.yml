@@ -44,7 +44,6 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm install
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -109,7 +108,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              #--tags project=your-tag \
+              #--tags project=udapeople \
               # --stack-name "your back-end stack name with workflow id" \
               # --parameter-overrides ID="your workflow id"  
               exit 1
@@ -118,7 +117,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              #--tags project=your-tag \
+              #--tags project=udapeople \
               # --stack-name "your front-end stack name with workflow id" \
               # --parameter-overrides ID="your workflow id"  
               exit 1
