@@ -138,7 +138,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=your-tag \
+              --tags project=udapeople \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
@@ -204,7 +204,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
             npm run migrations > migrations_dump.txt
       - run:
           name: Send Migration status to kvdb.io
@@ -213,10 +212,10 @@ jobs:
             cd backend
             if grep -q "has been executed successfully." migrations_dump.txt
             then
-              SUCCESS=$(curl https://kvdb.io/8UUves4u1yt1U2n7Qsf7ut/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1')
+              SUCCESS=$(curl https://kvdb.io/SGzgpzEq2xEksZcUPAkeqr/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1')
               echo "MIGRATION WAS SUCCESSFUL"
             else
-              SUCCESS=$(curl https://kvdb.io/8UUves4u1yt1U2n7Qsf7ut/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '0')
+              SUCCESS=$(curl https://kvdb.io/SGzgpzEq2xEksZcUPAkeqr/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '0')
               echo "MIGRATION FAILED"
             fi
       - destroy-environment:
