@@ -236,12 +236,12 @@ jobs:
           name: Get backend url
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query "Reservations[*].Instances[*].InstanceId" \
-              --filters Name=tag:aws:cloudfomation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
@@ -251,10 +251,12 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+
+      # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}        
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
                     
   deploy-backend:
     docker:
@@ -262,33 +264,33 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
-          - '0a:b5:62:81:42:b2:5c:e7:48:3c:83:a4:20:6d:a2:ea:5d:25:06:d5' 
+          fingerprints: ["a2:37:2d:e1:84:cf:a0:90:59:4d:dd:3e:c5:97:ed:7e:b3:15:f5:f0"]
       - run:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
-      - attach_workspace:
-          at: ~/
       - restore_cache:
           keys: [backend-build]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Deploy backend
           command: |
             cd backend
             npm i
             npm run build
+            cp package* ./dist
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
-            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------${cat inventory.txt}"
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i ./inventory.txt ./deploy-backend.yml
+
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}    
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}    
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 #   smoke-test:
 #     docker:
 #       # Lightweight Docker image 
