@@ -264,7 +264,8 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["a2:37:2d:e1:84:cf:a0:90:59:4d:dd:3e:c5:97:ed:7e:b3:15:f5:f0"]
+          fingerprints: 
+          - 'a2:37:2d:e1:84:cf:a0:90:59:4d:dd:3e:c5:97:ed:7e:b3:15:f5:f0' 
       - run:
           name: Install dependencies
           command: |
@@ -279,13 +280,13 @@ jobs:
             cd backend
             npm i
             npm run build
-            cp package* ./dist
             cd ..
+            ## Zip the directory
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            ansible-playbook -i ./inventory.txt ./deploy-backend.yml
+            ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
