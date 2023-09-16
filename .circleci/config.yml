@@ -316,6 +316,8 @@ jobs:
             apk update
             apk add --update unzip curl nodejs npm
             pip install awscli
+      - restore_cache:
+        keys: [backend-build]
       - run:
           name: Get backend url and Backend Smoke Test
           command: |
@@ -368,7 +370,7 @@ jobs:
             echo $OldWorkflowID >> ~/OldWorkflowID.txt
             cat ~/OldWorkflowID.txt
 
-            curl https://kvdb.io/8UUves4u1yt1U2n7Qsf7ut/${CIRCLE_WORKFLOW_ID:0:7} -d $OldWorkflowID
+            curl https://kvdb.io/SGzgpzEq2xEksZcUPAkeqr/${CIRCLE_WORKFLOW_ID:0:7} -d $OldWorkflowID
 
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
