@@ -36,6 +36,8 @@ commands:
           command: |
              cd ~/project/backend
              npm install
+             npm audit fix --audit-level=critical --force
+             npm audit fix --audit-level=critical --force
              npm run migrations:revert
             
 jobs:
@@ -286,7 +288,8 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --force
+            npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             npm run build
             cd ..
             ## Zip the directory
