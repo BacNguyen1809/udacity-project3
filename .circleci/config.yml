@@ -28,17 +28,20 @@ commands:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
       workflow_id:
-        type: string  
+        type: string
     steps:
       - run:
           name: Revert migrations
           when: on_fail
           command: |
-             cd ~/project/backend
-             npm update
-             npm install
-             npm audit fix --audit-level=critical --force
-             npm run migrations:revert
+            echo "Reverting Database  ########### "
+            SUCCESS=$(curl --insecure https://kvdb.io/SGzgpzEq2xEksZcUPAkeqr/migration_<<parameters.workflow_id>>)
+            if (( $SUCCESS == 1 ));
+            then
+              cd ~/project/backend
+              npm install
+              npm run migrations:revert
+            fi
             
 jobs:
   build-frontend:
