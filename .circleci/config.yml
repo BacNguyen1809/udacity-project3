@@ -279,6 +279,7 @@ jobs:
           command: |
             cd backend
             npm install --force
+            npm audit fix --force
             npm run build
             cd ..
             ## Zip the directory
