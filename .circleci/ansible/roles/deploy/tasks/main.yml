@@ -1,7 +1,8 @@
 ---
-- name: "Create directory for backend"
+- name: create backend directory
+  become: yes
   file:
-    path: ~/backend-app
+    path: ~/backend
     state: directory
 
 - name: copy backend files
